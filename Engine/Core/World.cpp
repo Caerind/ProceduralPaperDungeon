@@ -31,14 +31,14 @@ FontManager& World::getFonts()
 
 void World::handleEvent(const sf::Event& event)
 {
-	OE_PROFILE_FUNCTION("World::handleEvent");
+	//OE_PROFILE_FUNCTION("World::handleEvent");
 
 	mActionSystem.addEvent(event);
 }
 
 void World::update(Time dt)
 {
-	OE_PROFILE_FUNCTION("World::update");
+	//OE_PROFILE_FUNCTION("World::update");
 
 	mRenderSystem.clearDebugDraw(); // Clear DebugDraw
 	mEntityManager.update(); // Will add/remove entities
@@ -67,7 +67,7 @@ void World::update(Time dt)
 
 void World::render(sf::RenderTarget& target)
 {
-	OE_PROFILE_FUNCTION("World::render");
+	//OE_PROFILE_FUNCTION("World::render");
 
 	mRenderSystem.render(target);
 }

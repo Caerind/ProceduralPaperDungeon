@@ -2,7 +2,11 @@
 #define GAMESTATE_HPP
 
 #include "../Engine/Application/StateManager.hpp"
+#include "../Engine/Core/EntityHandle.hpp"
 #include "../Engine/Core/World.hpp"
+
+#include "RoomData.hpp"
+#include "Room.hpp"
 
 class GameState : public oe::State
 {
@@ -18,9 +22,12 @@ class GameState : public oe::State
 
 	private:
 		oe::World mWorld;
-		oe::Time mDuration;
-		oe::ImGuiProfiler mProfiler;
+		//oe::ImGuiProfiler mProfiler;
 
+        RoomData mFirstRoomData;
+        Room::Ptr mCurrentRoom;
+
+		//oe::EntityHandle playerHandle;
 };
 
 #endif // GAMESTATE_HPP
