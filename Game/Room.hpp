@@ -13,6 +13,12 @@ class Room
         Room(oe::World& world, RoomData& roomData);
         ~Room();
 
+        bool hasDoor(RoomData::DoorFlags doorFlag) const;
+        unsigned int getRoomIndex(RoomData::DoorFlags doorFlag) const;
+
+        const std::string& getSeed() const;
+        unsigned int getIndex() const;
+
         typedef std::unique_ptr<Room> Ptr;
 
     private:

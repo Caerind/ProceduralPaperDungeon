@@ -19,4 +19,23 @@ Room::Room(oe::World& world, RoomData& roomData)
 
 Room::~Room()
 {
+    for (unsigned int i = 0; i < mEntities.size(); i++)
+    {
+        mWorld.getEntityManager().killEntity(mEntities[i]);
+    }
+}
+
+bool Room::hasDoor(RoomData::DoorFlags doorFlag) const
+{
+    return (mData.getDoorFlags() & doorFlag) != 0;
+}
+
+unsigned int Room::getRoomIndex(RoomData::DoorFlags doorFlag) const
+{
+    return mData.getConnectionIndex(doorFlag);
+}
+
+unsigned int Room::getIndex() const
+{
+    return mData.getRoomIndex();
 }

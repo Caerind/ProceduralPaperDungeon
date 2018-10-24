@@ -22,7 +22,7 @@ int main()
 	window.closeOnClosed();
 
 	// Load State
-	application.start<GameState>();
+	application.start<GameState>("Gurnaud");
 
 	getchar();
 	return 0;

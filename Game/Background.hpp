@@ -17,10 +17,12 @@ class Background : public oe::Entity
         oe::SpriteComponent mBackground;
         oe::SpriteComponent mWall;
         std::vector<std::unique_ptr<oe::SpriteComponent>> mDoors;
+        std::vector<std::unique_ptr<oe::SpriteComponent>> mStains;
 
         static oe::ResourceId mBackgroundTexture;
         static oe::ResourceId mWallTexture;
         static oe::ResourceId mRoomThingsTexture;
+        static oe::ResourceId mStainsTexture;
 };
 
 #endif // BACKGROUND_HPP

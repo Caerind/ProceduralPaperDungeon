@@ -26,15 +26,21 @@ Background::Background(oe::EntityManager& manager, RoomData& roomData)
         mWallTexture = manager.getWorld().getApplication().getTextures().create("wallTexture", oe::TextureLoader::loadFromFile(TEXTURE_WALL));
     }
 
-    // Load room things if not loaded
+    // Load room things texture if not loaded
     if (mRoomThingsTexture == 0)
     {
         mRoomThingsTexture = manager.getWorld().getApplication().getTextures().create("roomThingsTexture", oe::TextureLoader::loadFromFile(TEXTURE_ROOM_THINGS));
     }
 
+    // Load stain texture if not loaded
+    if (mStainsTexture == 0)
+    {
+        mStainsTexture = manager.getWorld().getApplication().getTextures().create("stainTexture", oe::TextureLoader::loadFromFile(TEXTURE_STAINS));
+    }
+
     // First load background
     mBackground.setTexture(mBackgroundTexture);
-    mBackground.setPositionZ(-15.0f);
+    mBackground.setPositionZ(-20.0f);
     mBackground.setPosition(80.0f, 80.0f);
 
     // Then load background
@@ -80,8 +86,21 @@ Background::Background(oe::EntityManager& manager, RoomData& roomData)
     }
 
     // If specified in room data, add things on the floor
+    for (unsigned int i = 0; i < mRoomData.getStainCount(); i++)
+    {
+        const RoomData::Stain& stain = mRoomData.getStain(i);
+        std::unique_ptr<oe::SpriteComponent> sprite = std::unique_ptr<oe::SpriteComponent>(new oe::SpriteComponent(*this));
+        sprite->setTexture(mStainsTexture);
+        sprite->setTextureRect(sf::IntRect(200 * stain.type, 0, 200, 200));
+        sprite->setPositionZ(-15.0f);
+        sprite->setPosition(stain.x, stain.y);
+        sprite->setRotation(stain.angle);
+        sprite->setScale(stain.scale, stain.scale);
+        mStains.push_back(std::move(sprite));
+    }
 }
 
 oe::ResourceId Background::mBackgroundTexture = 0;
 oe::ResourceId Background::mWallTexture = 0;
 oe::ResourceId Background::mRoomThingsTexture = 0;
+oe::ResourceId Background::mStainsTexture = 0;

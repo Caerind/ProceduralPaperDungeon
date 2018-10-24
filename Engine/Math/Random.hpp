@@ -83,9 +83,9 @@ class Random
 			return get<I32>(0, 1) == 1;
 		}
 
-		static void setSeed(const std::string& seed);
+		static void setSeed(U32 seed);
 
-		static const std::string& getSeed();
+		static U32 getSeed();
 
 	private:
         Random();
@@ -93,7 +93,7 @@ class Random
     private:
         static Random mRandom;
         std::mt19937 mGenerator;
-        std::string mSeed;
+        U32 mSeed;
 };
 
 template <typename T>

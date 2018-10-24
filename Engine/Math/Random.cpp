@@ -9,27 +9,20 @@ namespace oe
 
 Random Random::mRandom;
 
-void Random::setSeed(const std::string& seed)
+void Random::setSeed(U32 seed)
 {
 	mRandom.mSeed = seed;
-	#ifdef _MSC_VER
-	mRandom.mGenerator.seed(std::seed_seq(mRandom.mSeed.begin(), mRandom.mSeed.end()));
-	#else
-	static std::seed_seq seedSeq = std::seed_seq(mRandom.mSeed.begin(), mRandom.mSeed.end());
-	mRandom.mGenerator.seed(seedSeq);
-	#endif
+	mRandom.mGenerator.seed(seed);
 }
 
-const std::string& Random::getSeed()
+U32 Random::getSeed()
 {
 	return mRandom.mSeed;
 }
 
 Random::Random()
 {
-	std::ostringstream oss;
-	oss << Time::getCurrentTime().asMicroseconds();
-	setSeed(oss.str());
+	setSeed(Time::getCurrentTime().asMicroseconds());
 }
 
 } // namespace oe
