@@ -7,6 +7,9 @@ RoomData::RoomData()
     , mDoorFlags(DoorFlags::None)
     , mConnections()
     , mStains()
+    , mEnemies()
+    , mChestRoom(false)
+    , mStairsRoom(false)
 {
 }
 
@@ -83,4 +86,54 @@ const RoomData::Stain& RoomData::getStain(unsigned int index) const
 unsigned int RoomData::getStainCount() const
 {
     return mStains.size();
+}
+
+void RoomData::addEnemy(int type, float x, float y)
+{
+    Enemy enemy;
+    enemy.index = mEnemies.size();
+    enemy.type = type;
+    enemy.x = x;
+    enemy.y = y;
+    mEnemies.push_back(enemy);
+}
+
+RoomData::Enemy& RoomData::getEnemy(unsigned int index)
+{
+    return mEnemies[index];
+}
+
+const RoomData::Enemy& RoomData::getEnemy(unsigned int index) const
+{
+    return mEnemies[index];
+}
+
+unsigned int RoomData::getEnemyCount() const
+{
+    return mEnemies.size();
+}
+
+void RoomData::removeEnemy(unsigned int index)
+{
+    mEnemies.erase(mEnemies.begin() + index);
+}
+
+void RoomData::setChestRoom()
+{
+    mChestRoom = true;
+}
+
+bool RoomData::isChestRoom() const
+{
+    return mChestRoom;
+}
+
+void RoomData::setStairsRoom()
+{
+    mStairsRoom = true;
+}
+
+bool RoomData::isStairsRoom() const
+{
+    return mStairsRoom;
 }

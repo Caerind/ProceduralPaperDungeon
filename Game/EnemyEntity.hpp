@@ -6,13 +6,17 @@
 class EnemyEntity : public Entity
 {
     public:
-        EnemyEntity(oe::EntityManager& manager);
+        enum Type
+        {
+            bat,
+            spider,
+            bouftou
+        };
+
+        EnemyEntity(oe::EntityManager& manager,Type enemyEntityType);
         ~EnemyEntity();
 
         virtual void update(oe::Time dt);
-
-    private:
-
 };
 
 #endif // ENEMYENTITY_HPP

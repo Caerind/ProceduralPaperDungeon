@@ -132,6 +132,34 @@ void FloorData::generateDoors()
 
 void FloorData::generateRooms()
 {
+    // Chests
+    int numChests = 1 + (mLevel / 10);
+    int numChestsPlaced = 0;
+    for (int i = (int)mRoomData.size() - 1; i >= 0; i--)
+    {
+        if (numChestsPlaced < numChests && mRoomData[i].getDoorAmount() == 1)
+        {
+            mRoomData[i].setChestRoom();
+            numChestsPlaced++;
+        }
+    }
+
+    // Stairs
+    bool stairsPlaced = false;
+    for (int i = (int)mRoomData.size() - 1; i >= 0; i--)
+    {
+        if (!stairsPlaced && !mRoomData[i].isChestRoom() && mRoomData[i].getDoorAmount() == 1)
+        {
+            mRoomData[i].setStairsRoom();
+            stairsPlaced = true;
+        }
+    }
+    if (!stairsPlaced)
+    {
+        mRoomData[oe::Random::get<unsigned int>(1, mRoomData.size() - 1)].setStairsRoom();
+    }
+
+    // Stains and Enemies
     for (unsigned int i = 0; i < mRoomData.size(); i++)
     {
         int numStains = oe::Random::get<int>(0, 2);
@@ -143,6 +171,15 @@ void FloorData::generateRooms()
             float scale = oe::Random::get<float>(0.5f, 1.8f);
             float angle = oe::Random::get<float>(0.0f, 360.0f);
             mRoomData[i].addStain(type, x, y, scale, angle);
+        }
+
+        int numEnemies = oe::Random::get<int>(0, 3);
+        for (int j = 0; j < numEnemies; j++)
+        {
+            int type = oe::Random::get<int>(0, 3);
+            float x = 80.0f + oe::Random::get<float>(0.0f, WINSIZEX - 160.0f);
+            float y = 80.0f + oe::Random::get<float>(0.0f, WINSIZEY - 160.0f);
+            mRoomData[i].addEnemy(type, x, y);
         }
     }
 }

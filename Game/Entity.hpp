@@ -31,6 +31,10 @@ class Entity : public oe::Entity
         void setFireRange(float fireRange);
         void setFireCooldown(float fireCooldown);
 
+        virtual bool determineMovement(oe::Vector2& mvt);
+
+		bool tryMove(oe::Time dt, oe::Vector2& mvt);
+
     protected:
         oe::SpriteComponent mSprite;
 
@@ -40,8 +44,10 @@ class Entity : public oe::Entity
         float mMovementSpeed;
         float mFireSpeed;
         float mFireRange;
-        float mFireCooldown;
+        oe::Time mFireLimit;
+        oe::Time mFireCooldown;
 
+        static oe::ResourceId mTilesetTexture;
 };
 
 #endif // ENTITY_HPP

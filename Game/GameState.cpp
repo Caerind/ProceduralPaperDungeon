@@ -19,12 +19,16 @@ GameState::GameState(oe::StateManager& manager, const std::string& seed)
 
 	mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(0)));
 
+	mPlayerHandle = mWorld.getEntityManager().createEntity<PlayerEntity>();
+
 	mWorld.update(oe::Time::Zero);
 }
 
 bool GameState::handleEvent(const sf::Event& event)
 {
 	//OE_PROFILE_FUNCTION("GameState::handleEvent");
+
+	mWorld.handleEvent(event);
 
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up && mCurrentRoom->hasDoor(RoomData::Top))
     {

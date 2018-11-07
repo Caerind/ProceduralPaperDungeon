@@ -6,6 +6,7 @@
 #include "../Engine/Core/World.hpp"
 
 #include "FloorData.hpp"
+#include "PlayerEntity.hpp"
 #include "RoomData.hpp"
 #include "Room.hpp"
 
@@ -34,6 +35,8 @@ class GameState : public oe::State
 		FloorData::Ptr mFloorData;
 
         Room::Ptr mCurrentRoom;
+
+        oe::EntityHandle mPlayerHandle;
 };
 
 #endif // GAMESTATE_HPP

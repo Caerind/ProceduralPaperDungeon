@@ -43,7 +43,7 @@ Background::Background(oe::EntityManager& manager, RoomData& roomData)
     mBackground.setPositionZ(-20.0f);
     mBackground.setPosition(80.0f, 80.0f);
 
-    // Then load background
+    // Then load wall
     mWall.setTexture(mWallTexture);
     mWall.setPositionZ(-10.0f);
     mWall.setPosition(0.0f, 0.0f);
@@ -53,6 +53,7 @@ Background::Background(oe::EntityManager& manager, RoomData& roomData)
     {
         std::unique_ptr<oe::SpriteComponent> sprite = std::unique_ptr<oe::SpriteComponent>(new oe::SpriteComponent(*this));
         sprite->setTexture(mRoomThingsTexture);
+        sprite->setTextureRect(sf::IntRect(0, 0, 60, 80));
         sprite->setPositionZ(-5.0f);
         sprite->setPosition((WINSIZEX / 2) - 30, 0);
         mDoors.push_back(std::move(sprite));
@@ -61,6 +62,7 @@ Background::Background(oe::EntityManager& manager, RoomData& roomData)
     {
         std::unique_ptr<oe::SpriteComponent> sprite = std::unique_ptr<oe::SpriteComponent>(new oe::SpriteComponent(*this));
         sprite->setTexture(mRoomThingsTexture);
+        sprite->setTextureRect(sf::IntRect(0, 0, 60, 80));
         sprite->setPositionZ(-5.0f);
         sprite->setPosition(WINSIZEX, (WINSIZEY / 2) - 30);
         sprite->setRotation(90);
@@ -70,6 +72,7 @@ Background::Background(oe::EntityManager& manager, RoomData& roomData)
     {
         std::unique_ptr<oe::SpriteComponent> sprite = std::unique_ptr<oe::SpriteComponent>(new oe::SpriteComponent(*this));
         sprite->setTexture(mRoomThingsTexture);
+        sprite->setTextureRect(sf::IntRect(0, 0, 60, 80));
         sprite->setPositionZ(-5.0f);
         sprite->setPosition((WINSIZEX / 2) - 30 + 60, WINSIZEY);
         sprite->setRotation(180);
@@ -79,6 +82,7 @@ Background::Background(oe::EntityManager& manager, RoomData& roomData)
     {
         std::unique_ptr<oe::SpriteComponent> sprite = std::unique_ptr<oe::SpriteComponent>(new oe::SpriteComponent(*this));
         sprite->setTexture(mRoomThingsTexture);
+        sprite->setTextureRect(sf::IntRect(0, 0, 60, 80));
         sprite->setPositionZ(-5.0f);
         sprite->setPosition(0, (WINSIZEY / 2) + 30);
         sprite->setRotation(270);

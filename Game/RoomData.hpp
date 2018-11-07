@@ -42,6 +42,26 @@ class RoomData
         const Stain& getStain(unsigned int index) const;
         unsigned int getStainCount() const;
 
+        struct Enemy
+        {
+            unsigned int index;
+            int type;
+            float x;
+            float y;
+        };
+
+        void addEnemy(int type, float x, float y);
+        Enemy& getEnemy(unsigned int index);
+        const Enemy& getEnemy(unsigned int index) const;
+        unsigned int getEnemyCount() const;
+        void removeEnemy(unsigned int index);
+
+        void setChestRoom();
+        bool isChestRoom() const;
+
+        void setStairsRoom();
+        bool isStairsRoom() const;
+
     private:
         unsigned int mRoomIndex;
         int mRoomX;
@@ -49,6 +69,9 @@ class RoomData
         DoorFlags mDoorFlags;
         std::map<DoorFlags, unsigned int> mConnections;
         std::vector<Stain> mStains;
+        std::vector<Enemy> mEnemies;
+        bool mChestRoom;
+        bool mStairsRoom;
 };
 
 inline RoomData::DoorFlags operator|(RoomData::DoorFlags a, RoomData::DoorFlags b)
