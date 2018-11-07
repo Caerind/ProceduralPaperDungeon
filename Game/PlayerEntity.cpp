@@ -10,7 +10,7 @@ PlayerEntity::PlayerEntity(oe::EntityManager& manager)
     , mAction(*this)
 
 {
-    // First load background
+    // First load sprite
     mSprite.setTexture(mTilesetTexture);
     mSprite.setTextureRect(sf::IntRect(12, 5, 58, 70));
     mSprite.setPositionZ(10.0f);
@@ -21,9 +21,9 @@ PlayerEntity::PlayerEntity(oe::EntityManager& manager)
     mLife = 100;
     mLifeMax = 0;
     mStrength = 10;
-    mMovementSpeed = 100;
+    mMovementSpeed = 200;
     mFireSpeed = 200.0f;
-    mFireLimit = oe::seconds(0.5f);
+    mFireLimit = oe::seconds(0.1f);
     mFireCooldown = mFireLimit;
 
     loadInputs();
@@ -57,22 +57,14 @@ void PlayerEntity::loadInputs()
 
 void PlayerEntity::update(oe::Time dt)
 {
-
     mFireCooldown += dt;
+
     oe::Vector2 mvt;
 	bool moved = determineMovement(mvt);
 	if (moved)
 	{
-		moved = tryMove(dt, mvt);
-		if (moved)
-		{
-
-		}
+		tryMove(dt, mvt);
 	}
-    else
-    {
-
-    }
 }
 
 bool PlayerEntity::shoot()

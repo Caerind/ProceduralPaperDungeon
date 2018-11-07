@@ -134,12 +134,14 @@ void FloorData::generateRooms()
 {
     // Chests
     int numChests = 1 + (mLevel / 10);
+    printf("Chests : %d\n", numChests);
     int numChestsPlaced = 0;
     for (int i = (int)mRoomData.size() - 1; i >= 0; i--)
     {
         if (numChestsPlaced < numChests && mRoomData[i].getDoorAmount() == 1)
         {
             mRoomData[i].setChestRoom();
+            printf("Chest : %d in %d (%d,%d)\n", i, mRoomData[i].getRoomIndex(), mRoomData[i].getRoomX(), mRoomData[i].getRoomY());
             numChestsPlaced++;
         }
     }
@@ -152,17 +154,24 @@ void FloorData::generateRooms()
         {
             mRoomData[i].setStairsRoom();
             stairsPlaced = true;
+            printf("Stair : Success(%d) on %d (%d,%d)\n", i, mRoomData[i].getRoomIndex(), mRoomData[i].getRoomX(), mRoomData[i].getRoomY());
+            break;
         }
     }
     if (!stairsPlaced)
     {
-        mRoomData[oe::Random::get<unsigned int>(1, mRoomData.size() - 1)].setStairsRoom();
+        unsigned int index = oe::Random::get<unsigned int>(1, mRoomData.size() - 1);
+        mRoomData[index].setStairsRoom();
+        printf("Stair : Random(%d) on %d (%d,%d)\n", index, mRoomData[index].getRoomIndex(), mRoomData[index].getRoomX(), mRoomData[index].getRoomY());
     }
 
     // Stains and Enemies
     for (unsigned int i = 0; i < mRoomData.size(); i++)
     {
+        printf("%d in %d (%d,%d)\n", i, mRoomData[i].getRoomIndex(), mRoomData[i].getRoomX(), mRoomData[i].getRoomY());
+
         int numStains = oe::Random::get<int>(0, 2);
+        printf("Stains : %d\n", numStains);
         for (int j = 0; j < numStains; j++)
         {
             int type = oe::Random::get<int>(0, 3);
@@ -171,16 +180,20 @@ void FloorData::generateRooms()
             float scale = oe::Random::get<float>(0.5f, 1.8f);
             float angle = oe::Random::get<float>(0.0f, 360.0f);
             mRoomData[i].addStain(type, x, y, scale, angle);
+            printf("Stain : %d (%f,%f)\n", type, x, y);
         }
 
         int numEnemies = oe::Random::get<int>(0, 3);
+        printf("Enemies : %d\n", numEnemies);
         for (int j = 0; j < numEnemies; j++)
         {
             int type = oe::Random::get<int>(0, 3);
-            float x = 80.0f + oe::Random::get<float>(0.0f, WINSIZEX - 160.0f);
-            float y = 80.0f + oe::Random::get<float>(0.0f, WINSIZEY - 160.0f);
+            float x = oe::Random::get<float>(100.0f, WINSIZEX - 100.0f);
+            float y = oe::Random::get<float>(100.0f, WINSIZEY - 100.0f);
             mRoomData[i].addEnemy(type, x, y);
+            printf("Enemy : %d (%f,%f)\n", type, x, y);
         }
+        printf("\n");
     }
 }
 
