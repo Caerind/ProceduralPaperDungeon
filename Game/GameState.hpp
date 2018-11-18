@@ -24,10 +24,14 @@ class GameState : public oe::State
 		oe::Window& getWindow();
 		oe::View& getView();
 
+    private:
+        void checkPlayerAndRoom();
+        void checkPlayerAndDoors();
+
+        void generateDoorsRects();
+
 	private:
 		oe::World mWorld;
-		oe::ImGuiDataViewer mDataViewer;
-		//oe::ImGuiProfiler mProfiler;
 
 		std::string mSeed;
 		unsigned int mLevel;
@@ -35,6 +39,8 @@ class GameState : public oe::State
 		FloorData::Ptr mFloorData;
 
         Room::Ptr mCurrentRoom;
+
+        std::array<sf::FloatRect,4> mDoorsRects;
 
         oe::EntityHandle mPlayerHandle;
 };

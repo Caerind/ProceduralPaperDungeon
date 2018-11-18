@@ -2,21 +2,25 @@
 #define ENEMYENTITY_HPP
 
 #include "Entity.hpp"
+#include "Room.hpp"
 
 class EnemyEntity : public Entity
 {
     public:
         enum Type
         {
-            bat,
-            spider,
-            bouftou
+            Bat,
+            Spider,
+            Bouftou
         };
 
-        EnemyEntity(oe::EntityManager& manager,Type enemyEntityType);
+        EnemyEntity(oe::EntityManager& manager, Type enemyEntityType, Room* room);
         ~EnemyEntity();
 
-        virtual void update(oe::Time dt);
+        bool shoot();
+
+    protected:
+        Room* mRoom;
 };
 
 #endif // ENEMYENTITY_HPP

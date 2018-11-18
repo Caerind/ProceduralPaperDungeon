@@ -54,4 +54,5 @@ bool Entity::tryMove(oe::Time dt, oe::Vector2& mvt)
 
 	return !collision;
 }
+
 oe::ResourceId Entity::mTilesetTexture = 0;

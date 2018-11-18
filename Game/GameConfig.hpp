@@ -1,6 +1,8 @@
 #ifndef GAMECONFIG_HPP
 #define GAMECONFIG_HPP
 
+#define LOG_IN_CONSOLE true
+
 // Window
 #define WINSIZEX 1024
 #define WINSIZEY 768

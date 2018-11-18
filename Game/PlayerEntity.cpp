@@ -10,20 +10,25 @@ PlayerEntity::PlayerEntity(oe::EntityManager& manager)
     , mAction(*this)
 
 {
-    // First load sprite
+    // First load Tileset
     mSprite.setTexture(mTilesetTexture);
+    // Then select sprite
     mSprite.setTextureRect(sf::IntRect(12, 5, 58, 70));
+    // Priority of the sprite
     mSprite.setPositionZ(10.0f);
+    // Adjust the position of the sprite
     mSprite.setPosition(-26.5f, -65.0f);
 
+    // Position of the player entity at start
     setPosition(512, 394);
 
-    mLife = 100;
-    mLifeMax = 0;
-    mStrength = 10;
-    mMovementSpeed = 200;
-    mFireSpeed = 200.0f;
-    mFireLimit = oe::seconds(0.1f);
+    // Stat of the player entity at start
+    mLife = 100;                        // Life of the player can be healed
+    mLifeMax = 100;                     // Max life of the player can be improve by chest and boss fight
+    mStrength = 10;                     // Strengh of the player can be improve by chest and boss fight
+    mMovementSpeed = 200;               // Movement speed of the player
+    mFireSpeed = 200.0f;                // Speed of the projectile
+    mFireLimit = oe::seconds(0.5f);     // Time between two shots
     mFireCooldown = mFireLimit;
 
     loadInputs();
@@ -63,8 +68,16 @@ void PlayerEntity::update(oe::Time dt)
 	bool moved = determineMovement(mvt);
 	if (moved)
 	{
-		tryMove(dt, mvt);
+		moved = tryMove(dt, mvt);
+		if (moved)
+		{
+
+		}
 	}
+    else
+    {
+
+    }
 }
 
 bool PlayerEntity::shoot()

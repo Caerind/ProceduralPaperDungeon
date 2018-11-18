@@ -15,7 +15,10 @@ FloorData::FloorData(const std::string& globalSeed, unsigned int level)
 {
     std::hash<std::string> hasher;
     mSeedNum = hasher(mSeed);
-    printf("%s : %d\n", mSeed.c_str(), mSeedNum);
+    if (LOG_IN_CONSOLE)
+    {
+        printf("%s : %d\n", mSeed.c_str(), mSeedNum);
+    }
     oe::Random::setSeed(mSeedNum);
 
     generateRoomGrid();
@@ -134,14 +137,20 @@ void FloorData::generateRooms()
 {
     // Chests
     int numChests = 1 + (mLevel / 10);
-    printf("Chests : %d\n", numChests);
+    if (LOG_IN_CONSOLE)
+    {
+        printf("Chests : %d\n", numChests);
+    }
     int numChestsPlaced = 0;
     for (int i = (int)mRoomData.size() - 1; i >= 0; i--)
     {
         if (numChestsPlaced < numChests && mRoomData[i].getDoorAmount() == 1)
         {
             mRoomData[i].setChestRoom();
-            printf("Chest : %d in %d (%d,%d)\n", i, mRoomData[i].getRoomIndex(), mRoomData[i].getRoomX(), mRoomData[i].getRoomY());
+            if (LOG_IN_CONSOLE)
+            {
+                printf("Chest : %d in %d (%d,%d)\n", i, mRoomData[i].getRoomIndex(), mRoomData[i].getRoomX(), mRoomData[i].getRoomY());
+            }
             numChestsPlaced++;
         }
     }
@@ -154,7 +163,10 @@ void FloorData::generateRooms()
         {
             mRoomData[i].setStairsRoom();
             stairsPlaced = true;
-            printf("Stair : Success(%d) on %d (%d,%d)\n", i, mRoomData[i].getRoomIndex(), mRoomData[i].getRoomX(), mRoomData[i].getRoomY());
+            if (LOG_IN_CONSOLE)
+            {
+                printf("Stair : Success(%d) on %d (%d,%d)\n", i, mRoomData[i].getRoomIndex(), mRoomData[i].getRoomX(), mRoomData[i].getRoomY());
+            }
             break;
         }
     }
@@ -162,16 +174,22 @@ void FloorData::generateRooms()
     {
         unsigned int index = oe::Random::get<unsigned int>(1, mRoomData.size() - 1);
         mRoomData[index].setStairsRoom();
-        printf("Stair : Random(%d) on %d (%d,%d)\n", index, mRoomData[index].getRoomIndex(), mRoomData[index].getRoomX(), mRoomData[index].getRoomY());
+        if (LOG_IN_CONSOLE)
+        {
+            printf("Stair : Random(%d) on %d (%d,%d)\n", index, mRoomData[index].getRoomIndex(), mRoomData[index].getRoomX(), mRoomData[index].getRoomY());
+        }
     }
 
     // Stains and Enemies
-    for (unsigned int i = 0; i < mRoomData.size(); i++)
+    for (unsigned int i = 1; i < mRoomData.size(); i++)
     {
-        printf("%d in %d (%d,%d)\n", i, mRoomData[i].getRoomIndex(), mRoomData[i].getRoomX(), mRoomData[i].getRoomY());
-
         int numStains = oe::Random::get<int>(0, 2);
-        printf("Stains : %d\n", numStains);
+        if (LOG_IN_CONSOLE)
+        {
+            printf("%d in %d (%d,%d)\n", i, mRoomData[i].getRoomIndex(), mRoomData[i].getRoomX(), mRoomData[i].getRoomY());
+            printf("Stains : %d\n", numStains);
+        }
+
         for (int j = 0; j < numStains; j++)
         {
             int type = oe::Random::get<int>(0, 3);
@@ -180,20 +198,32 @@ void FloorData::generateRooms()
             float scale = oe::Random::get<float>(0.5f, 1.8f);
             float angle = oe::Random::get<float>(0.0f, 360.0f);
             mRoomData[i].addStain(type, x, y, scale, angle);
-            printf("Stain : %d (%f,%f)\n", type, x, y);
+            if (LOG_IN_CONSOLE)
+            {
+                printf("Stain : %d (%f,%f)\n", type, x, y);
+            }
         }
 
         int numEnemies = oe::Random::get<int>(0, 3);
-        printf("Enemies : %d\n", numEnemies);
+        if (LOG_IN_CONSOLE)
+        {
+            printf("Enemies : %d\n", numEnemies);
+        }
         for (int j = 0; j < numEnemies; j++)
         {
-            int type = oe::Random::get<int>(0, 3);
+            int type = oe::Random::get<int>(0, 2);
             float x = oe::Random::get<float>(100.0f, WINSIZEX - 100.0f);
             float y = oe::Random::get<float>(100.0f, WINSIZEY - 100.0f);
             mRoomData[i].addEnemy(type, x, y);
-            printf("Enemy : %d (%f,%f)\n", type, x, y);
+            if (LOG_IN_CONSOLE)
+            {
+                printf("Enemy : %d (%f,%f)\n", type, x, y);
+            }
         }
-        printf("\n");
+        if (LOG_IN_CONSOLE)
+        {
+            printf("\n");
+        }
     }
 }
 
