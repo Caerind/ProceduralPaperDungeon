@@ -30,19 +30,23 @@ Room::Room(oe::World& world, RoomData& roomData, const oe::EntityHandle& playerH
     {
         const RoomData::Enemy& enemyData = mData.getEnemy(i);
 
+        printf("RoomThis %x\n", this);
+
         oe::EntityHandle enemyHandle;
         switch (enemyData.type)
         {
             case EnemyEntity::Bat:
-                enemyHandle = mWorld.getEntityManager().createEntity<BatEntity>(this);
+                enemyHandle = mWorld.getEntityManager().createEntity<BatEntity>();
                 if (LOG_IN_CONSOLE)
                 {
                     printf("Bat\n");
                 }
+                enemyHandle.getAs<BatEntity>()->setRoom(this);
                 break;
 
             case EnemyEntity::Spider:
-                enemyHandle = mWorld.getEntityManager().createEntity<SpiderEntity>(this);
+                enemyHandle = mWorld.getEntityManager().createEntity<SpiderEntity>();
+                enemyHandle.getAs<SpiderEntity>()->setRoom(this);
                 if (LOG_IN_CONSOLE)
                 {
                     printf("Spider\n");
@@ -50,7 +54,8 @@ Room::Room(oe::World& world, RoomData& roomData, const oe::EntityHandle& playerH
                 break;
 
             case EnemyEntity::Bouftou:
-                enemyHandle = mWorld.getEntityManager().createEntity<BouftouEntity>(this);
+                enemyHandle = mWorld.getEntityManager().createEntity<BouftouEntity>();
+                enemyHandle.getAs<BouftouEntity>()->setRoom(this);
                 if (LOG_IN_CONSOLE)
                 {
                     printf("Bouftou\n");

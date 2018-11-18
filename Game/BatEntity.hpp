@@ -10,7 +10,7 @@
 class BatEntity : public EnemyEntity
 {
     public:
-        BatEntity(oe::EntityManager& manager, Room* room);
+        BatEntity(oe::EntityManager& manager);
         ~BatEntity();
 
         virtual void update(oe::Time dt);

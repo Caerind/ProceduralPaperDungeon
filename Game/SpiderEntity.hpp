@@ -9,7 +9,7 @@
 class SpiderEntity : public EnemyEntity
 {
     public:
-        SpiderEntity(oe::EntityManager& manager, Room* room);
+        SpiderEntity(oe::EntityManager& manager);
         ~SpiderEntity();
 
         virtual void update(oe::Time dt);

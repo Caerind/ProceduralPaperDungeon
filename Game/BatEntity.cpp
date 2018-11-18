@@ -1,8 +1,8 @@
 #include "BatEntity.hpp"
 #include "Room.hpp"
 
-BatEntity::BatEntity(oe::EntityManager& manager, Room* room)
-    : EnemyEntity(manager, EnemyEntity::Bat, mRoom)
+BatEntity::BatEntity(oe::EntityManager& manager)
+    : EnemyEntity(manager, EnemyEntity::Bat)
 {
     mLifeMax = 20;
     mLife = mLifeMax;
@@ -22,12 +22,13 @@ BatEntity::~BatEntity()
 
 void BatEntity::update(oe::Time dt)
 {
-    /*
-    mFireCooldown += dt;
-    oe::Vector2 delta = mRoom->getPlayerHandle()->getPosition() - getPosition();
-    oe::Vector2 mvt = delta.normalize();
-    //bool moved =
-    tryMove(dt, mvt);
-    shoot();
-    */
+    if (mRoom != nullptr)
+    {
+        mFireCooldown += dt;
+        oe::Vector2 delta = mRoom->getPlayerHandle()->getPosition() - getPosition();
+        oe::Vector2 mvt = delta.normalize();
+        //bool moved =
+        tryMove(dt, mvt);
+        shoot();
+    }
 }

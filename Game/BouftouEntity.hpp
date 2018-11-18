@@ -9,7 +9,7 @@
 class BouftouEntity : public EnemyEntity
 {
     public:
-        BouftouEntity(oe::EntityManager& manager, Room* room);
+        BouftouEntity(oe::EntityManager& manager);
         ~BouftouEntity();
 
         virtual void update(oe::Time dt);

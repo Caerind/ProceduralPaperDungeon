@@ -20,8 +20,9 @@ GameState::GameState(oe::StateManager& manager, const std::string& seed)
 	mPlayerHandle = mWorld.getEntityManager().createEntity<PlayerEntity>();
 
 	mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(0), mPlayerHandle));
-
-	mWorld.update(oe::Time::Zero);
+    mWorld.getEntityManager().update();
+    generateDoorsRects();
+	mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
 
     generateDoorsRects();
 }
@@ -36,6 +37,8 @@ bool GameState::handleEvent(const sf::Event& event)
         mCurrentRoom.reset();
         mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(nextRoomIndex), mPlayerHandle));
         mWorld.getEntityManager().update();
+        generateDoorsRects();
+        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
     }
     else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right && mCurrentRoom->hasDoor(RoomData::Right))
     {
@@ -44,6 +47,7 @@ bool GameState::handleEvent(const sf::Event& event)
         mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(nextRoomIndex), mPlayerHandle));
         mWorld.getEntityManager().update();
         generateDoorsRects();
+        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
     }
     else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down && mCurrentRoom->hasDoor(RoomData::Bottom))
     {
@@ -52,6 +56,7 @@ bool GameState::handleEvent(const sf::Event& event)
         mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(nextRoomIndex), mPlayerHandle));
         mWorld.getEntityManager().update();
         generateDoorsRects();
+        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
     }
     else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left && mCurrentRoom->hasDoor(RoomData::Left))
     {
@@ -60,6 +65,7 @@ bool GameState::handleEvent(const sf::Event& event)
         mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(nextRoomIndex), mPlayerHandle));
         mWorld.getEntityManager().update();
         generateDoorsRects();
+        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
     }
 
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::LControl)
@@ -126,6 +132,7 @@ void GameState::checkPlayerAndDoors()
         mWorld.getEntityManager().update();
         mPlayerHandle->setPosition(512, 648);
         generateDoorsRects();
+        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
     }
     else if (mDoorsRects[1].contains(oe::toSF(mPlayerHandle->getPosition())))
     {
@@ -135,6 +142,7 @@ void GameState::checkPlayerAndDoors()
         mWorld.getEntityManager().update();
         mPlayerHandle->setPosition(160, 384);
         generateDoorsRects();
+        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
 
     }
     else if (mDoorsRects[2].contains(oe::toSF(mPlayerHandle->getPosition())))
@@ -145,6 +153,7 @@ void GameState::checkPlayerAndDoors()
         mWorld.getEntityManager().update();
         mPlayerHandle->setPosition(512, 120);
         generateDoorsRects();
+        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
     }
     else if (mDoorsRects[3].contains(oe::toSF(mPlayerHandle->getPosition())))
     {
@@ -154,6 +163,7 @@ void GameState::checkPlayerAndDoors()
         mWorld.getEntityManager().update();
         mPlayerHandle->setPosition(874, 384);
         generateDoorsRects();
+        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
     }
 }
 

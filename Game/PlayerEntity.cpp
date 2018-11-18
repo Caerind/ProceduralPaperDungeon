@@ -8,6 +8,7 @@
 PlayerEntity::PlayerEntity(oe::EntityManager& manager)
     : Entity(manager)
     , mAction(*this)
+    , mCurrentRoom(nullptr)
 
 {
     // First load Tileset
@@ -60,6 +61,11 @@ void PlayerEntity::loadInputs()
 	mShootInput.setType(oe::ActionType::Pressed);
 }
 
+void PlayerEntity::setCurrentRoom(Room* room)
+{
+    mCurrentRoom = room;
+}
+
 void PlayerEntity::update(oe::Time dt)
 {
     mFireCooldown += dt;
@@ -83,13 +89,13 @@ void PlayerEntity::update(oe::Time dt)
 bool PlayerEntity::shoot()
 {
     const oe::Vector2 pos = getApplication().getWindow().getCursorPositionView(getWorld().getRenderSystem().getView());
-	if (mFireCooldown >= mFireLimit )
+	if (mFireCooldown >= mFireLimit && mCurrentRoom != nullptr)
 	{
         oe::Vector2 pos2 = getPosition() - oe::Vector2(18.0f, 18.0f);
 		oe::Vector2 delta = pos - pos2;
 		delta.normalize();
 
-		getManager().createEntity<Projectile>(pos2, delta, mStrength, mFireSpeed);
+        mCurrentRoom->addEntity(getManager().createEntity<Projectile>(pos2, delta, mStrength, mFireSpeed));
 
 		mFireCooldown = oe::Time::Zero;
 

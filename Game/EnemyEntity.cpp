@@ -5,9 +5,9 @@
 
 #include "Projectile.hpp"
 
-EnemyEntity::EnemyEntity(oe::EntityManager& manager, EnemyEntity::Type enemyEntityType, Room* room)
+EnemyEntity::EnemyEntity(oe::EntityManager& manager, EnemyEntity::Type enemyEntityType)
     : Entity(manager)
-    , mRoom(room)
+    , mRoom(nullptr)
 {
     // First load background
     mSprite.setTexture(mTilesetTexture);
@@ -15,6 +15,11 @@ EnemyEntity::EnemyEntity(oe::EntityManager& manager, EnemyEntity::Type enemyEnti
 
 EnemyEntity::~EnemyEntity()
 {
+}
+
+void EnemyEntity::setRoom(Room* room)
+{
+    mRoom = room;
 }
 
 bool EnemyEntity::shoot()

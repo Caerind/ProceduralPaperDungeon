@@ -14,8 +14,10 @@ class EnemyEntity : public Entity
             Bouftou
         };
 
-        EnemyEntity(oe::EntityManager& manager, Type enemyEntityType, Room* room);
+        EnemyEntity(oe::EntityManager& manager, Type enemyEntityType);
         ~EnemyEntity();
+
+        void setRoom(Room* room);
 
         bool shoot();
 

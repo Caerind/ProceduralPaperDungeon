@@ -14,6 +14,7 @@
 #include <SFML/Window/Keyboard.hpp>
 
 #include "Entity.hpp"
+#include "Room.hpp"
 
 class PlayerEntity : public Entity
 {
@@ -28,17 +29,18 @@ class PlayerEntity : public Entity
 		static oe::ActionInputMouse mShootInput;
 		static void loadInputs();
 
-		bool shoot();
-
         PlayerEntity(oe::EntityManager& manager);
         ~PlayerEntity();
 
+        void setCurrentRoom(Room* room);
+
         virtual void update(oe::Time dt);
 
-        void increase();
+		bool shoot();
 
     private:
         oe::ActionComponent mAction;
+        Room* mCurrentRoom;
 
         virtual bool determineMovement(oe::Vector2& mvt);
 

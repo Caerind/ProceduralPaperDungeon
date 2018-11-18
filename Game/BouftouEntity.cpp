@@ -4,8 +4,8 @@
 #include "Room.hpp"
 #include "Projectile.hpp"
 
-BouftouEntity::BouftouEntity(oe::EntityManager& manager, Room* room)
-    : EnemyEntity(manager, EnemyEntity::Bouftou, mRoom)
+BouftouEntity::BouftouEntity(oe::EntityManager& manager)
+    : EnemyEntity(manager, EnemyEntity::Bouftou)
 {
     mLifeMax = 50;
     mLife = mLifeMax;

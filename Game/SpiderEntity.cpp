@@ -2,8 +2,8 @@
 #include "Room.hpp"
 #include "Projectile.hpp"
 
-SpiderEntity::SpiderEntity(oe::EntityManager& manager, Room* room)
-    : EnemyEntity(manager, EnemyEntity::Spider, mRoom)
+SpiderEntity::SpiderEntity(oe::EntityManager& manager)
+    : EnemyEntity(manager, EnemyEntity::Spider)
 {
     mLifeMax = 25;
     mLife = mLifeMax;
