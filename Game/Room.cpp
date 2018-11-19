@@ -14,7 +14,7 @@ Room::Room(oe::World& world, RoomData& roomData, const oe::EntityHandle& playerH
     , mData(roomData)
     , mPlayerHandle(playerHandle)
     , mStairs(mData.isStairsRoom())
-    , mClosedChest(false)
+    , mChest(nullptr)
     , mEntities()
 {
     if (LOG_IN_CONSOLE)
@@ -29,24 +29,18 @@ Room::Room(oe::World& world, RoomData& roomData, const oe::EntityHandle& playerH
     for (unsigned int i = 0; i < mData.getEnemyCount(); i++)
     {
         const RoomData::Enemy& enemyData = mData.getEnemy(i);
-
-        printf("RoomThis %x\n", this);
-
-        oe::EntityHandle enemyHandle;
         switch (enemyData.type)
         {
             case EnemyEntity::Bat:
-                enemyHandle = mWorld.getEntityManager().createEntity<BatEntity>();
+                createEnemy<BatEntity>(enemyData);
                 if (LOG_IN_CONSOLE)
                 {
                     printf("Bat\n");
                 }
-                enemyHandle.getAs<BatEntity>()->setRoom(this);
                 break;
 
             case EnemyEntity::Spider:
-                enemyHandle = mWorld.getEntityManager().createEntity<SpiderEntity>();
-                enemyHandle.getAs<SpiderEntity>()->setRoom(this);
+                createEnemy<SpiderEntity>(enemyData);
                 if (LOG_IN_CONSOLE)
                 {
                     printf("Spider\n");
@@ -54,8 +48,7 @@ Room::Room(oe::World& world, RoomData& roomData, const oe::EntityHandle& playerH
                 break;
 
             case EnemyEntity::Bouftou:
-                enemyHandle = mWorld.getEntityManager().createEntity<BouftouEntity>();
-                enemyHandle.getAs<BouftouEntity>()->setRoom(this);
+                createEnemy<BouftouEntity>(enemyData);
                 if (LOG_IN_CONSOLE)
                 {
                     printf("Bouftou\n");
@@ -64,19 +57,24 @@ Room::Room(oe::World& world, RoomData& roomData, const oe::EntityHandle& playerH
 
             default: break;
         }
-
-        enemyHandle->setPosition(enemyData.x, enemyData.y);
-        mEntities.push_back(enemyHandle);
-
     }
 
     // If chest add chest
     if (mData.isChestRoom())
     {
-        mEntities.push_back(mWorld.getEntityManager().createEntity<Chest>(mData));
+        oe::EntityHandle chestHandle = mWorld.getEntityManager().createEntity<Chest>(mData, mPlayerHandle);
+        mEntities.push_back(chestHandle);
+        mChest = chestHandle->getAs<Chest>();
         if (LOG_IN_CONSOLE)
         {
-            printf("Chest\n");
+            if (mChest->isOpen())
+            {
+                printf("Chest Open\n");
+            }
+            else
+            {
+                printf("Chest Closed\n");
+            }
         }
     }
 
@@ -93,28 +91,33 @@ Room::Room(oe::World& world, RoomData& roomData, const oe::EntityHandle& playerH
 
 Room::~Room()
 {
-    // TODO : Update state of the room
-
-    for (unsigned int i = 0; i < mEntities.size(); i++)
-    {
-        mWorld.getEntityManager().killEntity(mEntities[i]);
-    }
 }
 
 bool Room::update()
 {
-    if (mClosedChest)
-    {
-        // TODO : Open Chest
-    }
-
-    if (mStairs && mPlayerHandle.isValid())
+    if (mPlayerHandle.isValid() && ((mChest != nullptr && !mChest->isOpen()) || mStairs))
     {
         oe::Vector2 centerOfRoom(WINSIZEX * 0.5f, WINSIZEY * 0.5f);
         float delta = oe::Vector2::distance(centerOfRoom, mPlayerHandle->getPosition());
-        return delta < 40.0f;
+        if (mChest != nullptr && !mChest->isOpen() && delta < 50.0f)
+        {
+            mChest->open();
+        }
+        if (mStairs)
+        {
+            return delta < 40.0f;
+        }
     }
     return false;
+}
+
+void Room::clear()
+{
+    for (unsigned int i = 0; i < mEntities.size(); i++)
+    {
+        mWorld.getEntityManager().killEntity(mEntities[i]);
+    }
+    mWorld.getEntityManager().destroyEntities();
 }
 
 bool Room::hasDoor(RoomData::DoorFlags doorFlag) const
@@ -135,6 +138,21 @@ unsigned int Room::getIndex() const
 void Room::addEntity(const oe::EntityHandle& entityHandle)
 {
     mEntities.push_back(entityHandle);
+}
+
+void Room::removeEnemyWithIndex(unsigned int index)
+{
+    mData.removeEnemy(index);
+}
+
+void Room::updateEnemyPosition(unsigned int index, const oe::Vector2& position)
+{
+    RoomData::Enemy* enemy = mData.getEnemyPtr(index);
+    if (enemy != nullptr)
+    {
+        enemy->x = position.x;
+        enemy->y = position.y;
+    }
 }
 
 const oe::EntityHandle& Room::getPlayerHandle() const

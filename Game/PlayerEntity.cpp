@@ -104,6 +104,11 @@ bool PlayerEntity::shoot()
 	return false;
 }
 
+void PlayerEntity::increase()
+{
+    // TODO : Increase some stats randomly
+}
+
 bool PlayerEntity::determineMovement(oe::Vector2& mvt)
 {
 	bool moved = false;

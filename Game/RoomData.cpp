@@ -9,6 +9,7 @@ RoomData::RoomData()
     , mStains()
     , mEnemies()
     , mChestRoom(false)
+    , mChestOpen(false)
     , mStairsRoom(false)
 {
 }
@@ -20,6 +21,10 @@ RoomData::RoomData(unsigned int roomIndex, int x, int y)
     , mDoorFlags(DoorFlags::None)
     , mConnections()
     , mStains()
+    , mEnemies()
+    , mChestRoom(false)
+    , mChestOpen(false)
+    , mStairsRoom(false)
 {
 }
 
@@ -98,6 +103,18 @@ void RoomData::addEnemy(int type, float x, float y)
     mEnemies.push_back(enemy);
 }
 
+RoomData::Enemy* RoomData::getEnemyPtr(unsigned int index)
+{
+    for (std::size_t i = 0; i < mEnemies.size(); i++)
+    {
+        if (mEnemies[i].index == index)
+        {
+            return &mEnemies[i];
+        }
+    }
+    return nullptr;
+}
+
 RoomData::Enemy& RoomData::getEnemy(unsigned int index)
 {
     return mEnemies[index];
@@ -115,7 +132,14 @@ unsigned int RoomData::getEnemyCount() const
 
 void RoomData::removeEnemy(unsigned int index)
 {
-    mEnemies.erase(mEnemies.begin() + index);
+    for (std::size_t i = 0; i < mEnemies.size(); i++)
+    {
+        if (mEnemies[i].index == index)
+        {
+            mEnemies.erase(mEnemies.begin() + i);
+            i--;
+        }
+    }
 }
 
 void RoomData::setChestRoom()
@@ -126,6 +150,21 @@ void RoomData::setChestRoom()
 bool RoomData::isChestRoom() const
 {
     return mChestRoom;
+}
+
+void RoomData::closeChest()
+{
+    mChestOpen = false;
+}
+
+void RoomData::openChest()
+{
+    mChestOpen = true;
+}
+
+bool RoomData::isChestOpen() const
+{
+    return mChestOpen;
 }
 
 void RoomData::setStairsRoom()

@@ -36,10 +36,11 @@ class EntityManager
 
 		void clear();
 
-	private:
 		U32 spawnEntities();
 		U32 destroyEntities();
 		void updateQueries();
+
+	private:
 
 		U32 getFreeHandleIndex() const;
 		EntityHandle createEntity(Entity* entity);

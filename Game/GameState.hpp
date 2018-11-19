@@ -28,6 +28,9 @@ class GameState : public oe::State
         void checkPlayerAndRoom();
         void checkPlayerAndDoors();
 
+        void goToNextRoom(unsigned int index, const oe::Vector2& playerPosition);
+        void goToNextFloor();
+
         void generateDoorsRects();
 
 	private:

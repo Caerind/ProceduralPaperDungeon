@@ -19,6 +19,7 @@ SpiderEntity::SpiderEntity(oe::EntityManager& manager)
 
 SpiderEntity::~SpiderEntity()
 {
+    updateData();
 }
 
 void SpiderEntity::update(oe::Time dt)

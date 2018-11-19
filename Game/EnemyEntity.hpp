@@ -18,11 +18,16 @@ class EnemyEntity : public Entity
         ~EnemyEntity();
 
         void setRoom(Room* room);
+        void setIndex(unsigned int index);
+
+        unsigned int getIndexInData() const;
+        void updateData();
 
         bool shoot();
 
     protected:
         Room* mRoom;
+        unsigned int mIndex;
 };
 
 #endif // ENEMYENTITY_HPP

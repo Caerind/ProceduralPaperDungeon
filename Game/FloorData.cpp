@@ -147,6 +147,7 @@ void FloorData::generateRooms()
         if (numChestsPlaced < numChests && mRoomData[i].getDoorAmount() == 1)
         {
             mRoomData[i].setChestRoom();
+            mRoomData[i].closeChest();
             if (LOG_IN_CONSOLE)
             {
                 printf("Chest : %d in %d (%d,%d)\n", i, mRoomData[i].getRoomIndex(), mRoomData[i].getRoomX(), mRoomData[i].getRoomY());

@@ -14,6 +14,8 @@ class BouftouEntity : public EnemyEntity
 
         virtual void update(oe::Time dt);
 
+    private:
+        oe::Vector2 mPosPlayer;
 };
 
 #endif // BOUFTOUENTITY_HPP

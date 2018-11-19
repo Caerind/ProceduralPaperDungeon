@@ -18,6 +18,7 @@ BatEntity::BatEntity(oe::EntityManager& manager)
 
 BatEntity::~BatEntity()
 {
+    updateData();
 }
 
 void BatEntity::update(oe::Time dt)
@@ -25,10 +26,10 @@ void BatEntity::update(oe::Time dt)
     if (mRoom != nullptr)
     {
         mFireCooldown += dt;
+        shoot();
+
         oe::Vector2 delta = mRoom->getPlayerHandle()->getPosition() - getPosition();
         oe::Vector2 mvt = delta.normalize();
-        //bool moved =
         tryMove(dt, mvt);
-        shoot();
     }
 }

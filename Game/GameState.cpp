@@ -15,16 +15,11 @@ GameState::GameState(oe::StateManager& manager, const std::string& seed)
 	mWorld.getRenderSystem().setView(oe::View(0, 0, WINSIZEX, WINSIZEY));
 	mWorld.play();
 
-	mFloorData = FloorData::Ptr(new FloorData(mSeed, mLevel));
-
 	mPlayerHandle = mWorld.getEntityManager().createEntity<PlayerEntity>();
 
-	mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(0), mPlayerHandle));
-    mWorld.getEntityManager().update();
-    generateDoorsRects();
-	mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
+	mWorld.update(oe::Time::Zero);
 
-    generateDoorsRects();
+	goToNextFloor();
 }
 
 bool GameState::handleEvent(const sf::Event& event)
@@ -34,44 +29,27 @@ bool GameState::handleEvent(const sf::Event& event)
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up && mCurrentRoom->hasDoor(RoomData::Top))
     {
         unsigned int nextRoomIndex = mCurrentRoom->getRoomIndex(RoomData::Top);
-        mCurrentRoom.reset();
-        mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(nextRoomIndex), mPlayerHandle));
-        mWorld.getEntityManager().update();
-        generateDoorsRects();
-        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
+        goToNextRoom(nextRoomIndex, mPlayerHandle->getPosition());
     }
     else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right && mCurrentRoom->hasDoor(RoomData::Right))
     {
         unsigned int nextRoomIndex = mCurrentRoom->getRoomIndex(RoomData::Right);
-        mCurrentRoom.reset();
-        mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(nextRoomIndex), mPlayerHandle));
-        mWorld.getEntityManager().update();
-        generateDoorsRects();
-        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
+        goToNextRoom(nextRoomIndex, mPlayerHandle->getPosition());
     }
     else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down && mCurrentRoom->hasDoor(RoomData::Bottom))
     {
         unsigned int nextRoomIndex = mCurrentRoom->getRoomIndex(RoomData::Bottom);
-        mCurrentRoom.reset();
-        mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(nextRoomIndex), mPlayerHandle));
-        mWorld.getEntityManager().update();
-        generateDoorsRects();
-        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
+        goToNextRoom(nextRoomIndex, mPlayerHandle->getPosition());
     }
     else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left && mCurrentRoom->hasDoor(RoomData::Left))
     {
         unsigned int nextRoomIndex = mCurrentRoom->getRoomIndex(RoomData::Left);
-        mCurrentRoom.reset();
-        mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(nextRoomIndex), mPlayerHandle));
-        mWorld.getEntityManager().update();
-        generateDoorsRects();
-        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
+        goToNextRoom(nextRoomIndex, mPlayerHandle->getPosition());
     }
 
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::LControl)
     {
-         // TODO : Go to higher floor
-        printf("go\n");
+        goToNextFloor();
     }
 
 	// Screenshot
@@ -117,8 +95,7 @@ void GameState::checkPlayerAndRoom()
 {
 	if (mCurrentRoom != nullptr && mCurrentRoom->update())
     {
-        // TODO : Go to higher floor
-        printf("go\n");
+        goToNextFloor();
     }
 }
 
@@ -127,44 +104,49 @@ void GameState::checkPlayerAndDoors()
     if (mDoorsRects[0].contains(oe::toSF(mPlayerHandle->getPosition())))
     {
         unsigned int nextRoomIndex = mCurrentRoom->getRoomIndex(RoomData::Top);
-        mCurrentRoom.reset();
-        mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(nextRoomIndex), mPlayerHandle));
-        mWorld.getEntityManager().update();
-        mPlayerHandle->setPosition(512, 648);
-        generateDoorsRects();
-        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
+        goToNextRoom(nextRoomIndex, oe::Vector2(512, 648));
     }
     else if (mDoorsRects[1].contains(oe::toSF(mPlayerHandle->getPosition())))
     {
         unsigned int nextRoomIndex = mCurrentRoom->getRoomIndex(RoomData::Right);
-        mCurrentRoom.reset();
-        mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(nextRoomIndex), mPlayerHandle));
-        mWorld.getEntityManager().update();
-        mPlayerHandle->setPosition(160, 384);
-        generateDoorsRects();
-        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
+        goToNextRoom(nextRoomIndex, oe::Vector2(160, 384));
 
     }
     else if (mDoorsRects[2].contains(oe::toSF(mPlayerHandle->getPosition())))
     {
         unsigned int nextRoomIndex = mCurrentRoom->getRoomIndex(RoomData::Bottom);
-        mCurrentRoom.reset();
-        mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(nextRoomIndex), mPlayerHandle));
-        mWorld.getEntityManager().update();
-        mPlayerHandle->setPosition(512, 120);
-        generateDoorsRects();
-        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
+        goToNextRoom(nextRoomIndex, oe::Vector2(512, 120));
     }
     else if (mDoorsRects[3].contains(oe::toSF(mPlayerHandle->getPosition())))
     {
         unsigned int nextRoomIndex = mCurrentRoom->getRoomIndex(RoomData::Left);
-        mCurrentRoom.reset();
-        mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(nextRoomIndex), mPlayerHandle));
-        mWorld.getEntityManager().update();
-        mPlayerHandle->setPosition(874, 384);
-        generateDoorsRects();
-        mPlayerHandle->getAs<PlayerEntity>()->setCurrentRoom(mCurrentRoom.get());
+        goToNextRoom(nextRoomIndex, oe::Vector2(874, 384));
     }
+}
+
+void GameState::goToNextRoom(unsigned int index, const oe::Vector2& playerPosition)
+{
+    if (mCurrentRoom != nullptr)
+    {
+        mCurrentRoom->clear();
+    }
+    mCurrentRoom.reset();
+    mCurrentRoom = Room::Ptr(new Room(mWorld, mFloorData->getRoomData(index), mPlayerHandle));
+    mWorld.getEntityManager().spawnEntities();
+    generateDoorsRects();
+    PlayerEntity* playerEntity = mPlayerHandle->getAs<PlayerEntity>();
+    if (playerEntity != nullptr)
+    {
+        playerEntity->setPosition(playerPosition);
+        playerEntity->setCurrentRoom(mCurrentRoom.get());
+    }
+}
+
+void GameState::goToNextFloor()
+{
+    mLevel++;
+	mFloorData = FloorData::Ptr(new FloorData(mSeed, mLevel));
+	goToNextRoom(0, mPlayerHandle->getPosition());
 }
 
 void GameState::generateDoorsRects()

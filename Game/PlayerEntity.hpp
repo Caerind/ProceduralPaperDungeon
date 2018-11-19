@@ -38,6 +38,8 @@ class PlayerEntity : public Entity
 
 		bool shoot();
 
+		void increase();
+
     private:
         oe::ActionComponent mAction;
         Room* mCurrentRoom;

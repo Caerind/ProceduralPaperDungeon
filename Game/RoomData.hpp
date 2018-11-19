@@ -51,6 +51,7 @@ class RoomData
         };
 
         void addEnemy(int type, float x, float y);
+        Enemy* getEnemyPtr(unsigned int index);
         Enemy& getEnemy(unsigned int index);
         const Enemy& getEnemy(unsigned int index) const;
         unsigned int getEnemyCount() const;
@@ -58,6 +59,10 @@ class RoomData
 
         void setChestRoom();
         bool isChestRoom() const;
+
+        void closeChest();
+        void openChest();
+        bool isChestOpen() const;
 
         void setStairsRoom();
         bool isStairsRoom() const;
@@ -71,6 +76,7 @@ class RoomData
         std::vector<Stain> mStains;
         std::vector<Enemy> mEnemies;
         bool mChestRoom;
+        bool mChestOpen;
         bool mStairsRoom;
 };
 
