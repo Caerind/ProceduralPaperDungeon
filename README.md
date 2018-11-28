@@ -13,6 +13,12 @@ Trello : https://trello.com/b/gaBl2ico/proceduralpaperdungeon
 - Les salles comportent aussi un nombre aléatoire d'ennemis
 - Il y a plusieurs types d'ennemis, chacun avec des comportements différents
 - Des tâches d'encres sont placées aléatoirement dans les salles comme décorations
+
+
+### Touches
+ - ZQSD pour déplacer le personnage
+ - Clic droit pour tirer avec le personnage vers l'endroit pointé par la souris
+ - Les flèches pour changer directement de salle (seulement pour le Debug)
   
 ### Partie code
   
